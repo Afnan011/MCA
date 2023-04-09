@@ -23,6 +23,7 @@ void main()
     // calculation part
 
     count = 0;
+    seq = 0;
     while (count != n)
     {
         temp = qt;
