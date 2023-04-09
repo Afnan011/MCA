@@ -1,8 +1,8 @@
-#include<stdio.h>
+#include <stdio.h>
 
 void main()
 {
-    int n, i, qt, count, temp, seq; 
+    int n, i, qt, count, temp, seq;
     int bt[10], wt[10], tt[10], rem_bt[10];
     float awt, att;
 
@@ -12,7 +12,7 @@ void main()
     printf("Enter burst time of %d processes: \n", n);
     for (i = 0; i < n; i++)
     {
-        printf("P%d: ", i+1);
+        printf("P%d: ", i + 1);
         scanf("%d", &bt[i]);
         rem_bt[i] = bt[i];
     }
@@ -20,7 +20,7 @@ void main()
     printf("Enter the time quantom: ");
     scanf("%d", &qt);
 
-    //calculation part
+    // calculation part
 
     count = 0;
     while (count != n)
@@ -37,7 +37,7 @@ void main()
 
             if (rem_bt[i] > qt)
             {
-                rem_bt[i] -= qt; 
+                rem_bt[i] -= qt;
             }
             else
             {
@@ -45,14 +45,12 @@ void main()
                 {
                     temp = rem_bt[i];
                     rem_bt[i] = 0;
-                }   
+                }
             }
 
             seq += temp;
             tt[i] = seq;
-        
         }
-        
     }
 
     for (i = 0; i < n; i++)
@@ -65,19 +63,15 @@ void main()
 
     awt = awt / n;
     att = att / n;
+    
 
-
-    //printing the results
+    // printing the results
     printf("Process# \tBurst Time\tWaiting Time\tTurnaround Time\n");
     for (i = 0; i < n; i++)
     {
-        printf(" P%d\t\t%d\t\t%d\t\t%d\n", i+1, bt[i], wt[i], tt[i]);
+        printf(" P%d\t\t%d\t\t%d\t\t%d\n", i + 1, bt[i], wt[i], tt[i]);
     }
-    
+
     printf("Average Waiting Time = %0.2f\n", awt);
     printf("Average Turnaround Time = %0.2f\n", att);
-    
-
-    
-
 }
