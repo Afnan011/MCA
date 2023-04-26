@@ -1,9 +1,9 @@
 #include <stdio.h>
 
+int res[2];
+
 int *compare(int a[], int b[], int n)
 {
-    int res[2];
-
     res[0] = res[1] = 0;
 
     for (int i = 0; i < n; i++)
@@ -14,7 +14,6 @@ int *compare(int a[], int b[], int n)
         else if (a[i] < b[i])
             res[1] += 1;
     }
-
     return res;
 }
 
@@ -22,7 +21,7 @@ int main()
 {
     int a[100], b[100];
     int n = 3;
-    int *res;
+    int *r;
 
     for (int i = 0; i < n; i++)
         scanf("%d", &a[i]);
@@ -30,10 +29,11 @@ int main()
     for (int i = 0; i < n; i++)
         scanf("%d", &b[i]);
 
-    res = compare(a, b, n);
+    // calculation part
 
+    r = compare(a, b, n);
     for (int i = 0; i < 2; i++)
-        printf("%d ", *res);
+        printf("%d ", r[i]);
 
     return 0;
 }
