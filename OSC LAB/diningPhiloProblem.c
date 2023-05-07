@@ -3,6 +3,36 @@
 #include <stdio.h>
 #define NP 5			//NP->total number of plates
 
+void forks(int eatP);
+void eat1(int eatP);
+
+int isNeighbor(int eatP1, int eatP2);
+void eat2();
+
+void main()
+{
+	int wEat, eatP;		//wEat -> no. of philosophers wants to eat
+	//eatP -> which particular philoshopher is eating
+
+	printf("Enter how many philosphers wants to eat:");
+	scanf("%d", &wEat);
+	if (wEat == 1)
+	{
+		printf("\nEnter which philospher wants eat(0-4 values):");
+		scanf("%d", &eatP);
+		eat1(eatP);
+	}
+	else if (wEat == 2)
+	{
+		eat2();
+	}
+	else
+	{
+		printf("\nDeadlock state");
+	}
+}
+
+
 void forks(int eatP)
 {
 	int frk0, frk1;
@@ -61,27 +91,5 @@ void eat2()
 	{
 		eat1(eatP1);
 		eat1(eatP2);
-	}
-}
-void main()
-{
-	int wEat, eatP;		//wEat -> no. of philosophers wants to eat
-	//eatP -> which particular philoshopher is eating
-
-	printf("Enter how many philosphers wants to eat:");
-	scanf("%d", &wEat);
-	if (wEat == 1)
-	{
-		printf("\nEnter which philospher wants eat(0-4 values):");
-		scanf("%d", &eatP);
-		eat1(eatP);
-	}
-	else if (wEat == 2)
-	{
-		eat2();
-	}
-	else
-	{
-		printf("\nDeadlock state");
 	}
 }

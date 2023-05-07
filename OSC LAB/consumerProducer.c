@@ -1,11 +1,47 @@
 // C program to simulate the working of consumer producer problem in operating system
 
 #include <stdio.h>
-#define Maxf 4
+#define Maxf 4			//Max items+ that can be produced
 
 int plate[Maxf];
 int front = -1;
 int rear = -1;
+
+void produce(int quan);
+void consume();
+
+void main()
+{
+	int quan, ch;
+	printf("Enter what operation to perform");
+
+	do
+	{
+		printf("\n1.Produce \n2.Consume \n3.Exit :");
+		scanf("%d", &ch);
+		switch (ch)
+		{
+
+		case 1:
+			printf("\nEnter how much quantity want to produce:");
+			scanf("%d", &quan);
+			produce(quan);
+			break;
+
+		case 2:
+			consume();
+			break;
+
+		case 3:
+			printf("\nExiting");
+			break;
+
+		default:
+			printf("\nEnter a valid choice");
+		}
+
+	} while (ch != 3);
+}
 
 void produce(int quan)
 {
@@ -44,37 +80,4 @@ void consume()
 		front = (front + 1) % Maxf;
 		
 	printf("\n%d item is consumed", food);
-}
-
-void main()
-{
-	int quan, i, ch;
-	printf("Enter what operation to perform");
-
-	do
-	{
-		printf("\n1.Produce \n2.Consume \n3.Exit :");
-		scanf("%d", &ch);
-		switch (ch)
-		{
-
-		case 1:
-			printf("\nEnter how much quantity want to produce:");
-			scanf("%d", &quan);
-			produce(quan);
-			break;
-
-		case 2:
-			consume();
-			break;
-
-		case 3:
-			printf("\nExiting");
-			break;
-
-		default:
-			printf("\nEnter a valid choice");
-		}
-
-	} while (ch != 3);
 }
