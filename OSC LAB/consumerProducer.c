@@ -1,4 +1,3 @@
-// Program - cp.c
 // C program to simulate the working of consumer producer problem in operating system
 
 #include <stdio.h>

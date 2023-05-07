@@ -1,76 +1,82 @@
-// Program dinphilo.c
 // C program to simulate the working of dining philosophers problem for 5 philosophers and with maximum 2 eaters
 
 #include <stdio.h>
-#define NP 5			//NP->totla number of plates
+#define NP 5			//NP->total number of plates
 
-void forks(int eatp)
+void forks(int eatP)
 {
 	int frk0, frk1;
-	if (eatp == 0)
+	if (eatP == 0)
 	{
-		frk0 = eatp;
+		frk0 = eatP;
 		frk1 = NP - 1;
 	}
 	else
 	{
-		frk0 = eatp;
-		frk1 = eatp - 1;
+		frk0 = eatP;
+		frk1 = eatP - 1;
 	}
-	printf("\n%d can use Fork%d and Fork%d", eatp, frk0, frk1);
+	printf("\n%d can use Fork%d and Fork%d", eatP, frk0, frk1);
 }
 
-void eat1(int eatp)
+int isNeighbor(int eatP1, int eatP2){
+	
+	if (eatP2 == eatP1 + 1 || eatP2 == eatP1 - 1)
+		return 1;
+
+	else if(eatP2 == 0 && eatP1 == NP - 1 || eatP1 == 0 && eatP2 == NP - 1)
+		return 1;
+
+	else	
+		return 0;
+	
+}
+
+void eat1(int eatP)
 {
-	printf("\nPhilosopher %d is allowed to eat", eatp);
-	forks(eatp);
+	printf("\nPhilosopher %d is allowed to eat", eatP);
+	forks(eatP);
 }
 
 void eat2()
 {
-	int eatp1, eatp2;
+	int eatP1, eatP2;
+
 	printf("\nEnter which 2 different philosphers wants eat(0-4):");
 	printf("\nPhilosopher:");
-	scanf("%d", &eatp1);
-	printf("\nPhilosopher:");
-	scanf("%d", &eatp2);
+	scanf("%d", &eatP1);
 
-	if (eatp2 == eatp1 + 1 || eatp2 == eatp1 - 1)
+	printf("\nPhilosopher:");
+	scanf("%d", &eatP2);
+
+	if (isNeighbor(eatP1, eatP2) == 1)
 	{
 		printf("\nAt a time these two philosophers cant eat as they are neighbors");
-		eat1(eatp1);
-		printf("\n%d is waiting", eatp2);
-		printf("\n%d is completed eating", eatp1);
-		eat1(eatp2);
-	}
-	else if (eatp2 == 0 && eatp1 == NP - 1 || eatp1 == 0 && eatp2 == NP - 1)
-	{
-		printf("\nAt a time these two philosophers cant eat as they are neighbors");
-		eat1(eatp1);
-		printf("\n%d is waiting", eatp2);
-		printf("\n%d is completed eating", eatp1);
-		eat1(eatp2);
+		eat1(eatP1);
+		printf("\n%d is waiting", eatP2);
+		printf("\n%d is completed eating", eatP1);
+		eat1(eatP2);
 	}
 	else
 	{
-		eat1(eatp1);
-		eat1(eatp2);
+		eat1(eatP1);
+		eat1(eatP2);
 	}
 }
 void main()
 {
-	int WEat, eatp;
-	/*for(i=0;i<NP;i++)
-		philo[i]=i;*/
+	int wEat, eatP;		//wEat -> no. of philosophers wants to eat
+	//eatP -> which particular philoshopher is eating
+
 	printf("Enter how many philosphers wants to eat:");
-	scanf("%d", &WEat);
-	if (WEat == 1)
+	scanf("%d", &wEat);
+	if (wEat == 1)
 	{
 		printf("\nEnter which philospher wants eat(0-4 values):");
-		scanf("%d", &eatp);
-		eat1(eatp);
+		scanf("%d", &eatP);
+		eat1(eatP);
 	}
-	else if (WEat == 2)
+	else if (wEat == 2)
 	{
 		eat2();
 	}
