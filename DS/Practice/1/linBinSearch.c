@@ -70,14 +70,17 @@ void main()
 
     switch (ch)
     {
-    case 1: printf("\nEnter %d elements: ", n);
-            break;
+    case 1:
+        printf("\nEnter %d elements: ", n);
+        break;
 
-    case 2: printf("\nEnter %d elements(sorted): ", n);
-            break;
+    case 2:
+        printf("\nEnter %d elements(sorted): ", n);
+        break;
 
-    default: printf("\n\nInvalid choice\n\n");
-            return;  
+    default:
+        printf("\n\nInvalid choice\n\n");
+        return;
     }
 
     for (int i = 0; i < n; i++)
@@ -88,12 +91,13 @@ void main()
 
     switch (ch)
     {
-    case 1: linSearch(target);
-            break;
+    case 1:
+        linSearch(target);
+        break;
 
-    case 2: binSearch(target);
-            break;;        
+    case 2:
+        binSearch(target);
+        break;
+        ;
     }
-
-
 }
