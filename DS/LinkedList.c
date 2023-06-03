@@ -60,8 +60,11 @@ void main()
 
         case 6: printList();
                 break;
+
+        case 0: printf("\n\nExiting...\n\n");
+                break;
         
-        default: printf("Please enter a valid position");         
+        default: printf("Please enter a valid option");         
         }
 
     }while (ch != 0);
@@ -119,9 +122,14 @@ void insertAtBeg(int data)
 
 void insertAtEnd(int data)
 {
-    node *newNode = (node *)malloc(sizeof(node));
+    if (head == NULL)
+    {
+        insertAtBeg(data);
+        return;
+    }
 
     node *ptr = head;
+    node *newNode = (node *)malloc(sizeof(node));
 
     while (ptr->next != NULL)
     {
@@ -161,12 +169,19 @@ void deleteAtEnd()
     node *ptr;
     node *prev;
 
-    ptr = prev = head;
+    ptr = head;
+    prev = NULL;
 
     while (ptr->next != NULL)
     {
         prev = ptr;
         ptr = ptr->next;
+    }
+
+    if (prev == NULL)
+    {
+        deleteAtBeg();
+        return;
     }
 
     prev->next = NULL;
@@ -202,6 +217,13 @@ void deleteAtIndex(int pos)
         ptr = ptr->next;
         i++;
     }
+
+    if (i == 0)
+    {
+        deleteAtBeg();
+        return;
+    }
+    
 
     prev->next = ptr->next;
     ptr->next = NULL;

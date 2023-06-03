@@ -13,11 +13,11 @@ void consume();
 void main()
 {
 	int quan, ch;
-	printf("Enter what operation to perform");
 
 	do
 	{
-		printf("\n1.Produce \n2.Consume \n3.Exit :");
+		printf("\n1.Produce \n2.Consume \n3.Exit");
+		printf("\nEnter what operation to perform: ");
 		scanf("%d", &ch);
 		switch (ch)
 		{
@@ -57,7 +57,7 @@ void produce(int quan)
 
 	rear = (rear + 1) % Maxf;
 	plate[rear] = quan;
-	printf("\n%d item is produced and ready to consume", quan);
+	printf("\n%d items are produced and ready to consume", quan);
 }
 
 void consume()
@@ -79,5 +79,5 @@ void consume()
 	else
 		front = (front + 1) % Maxf;
 		
-	printf("\n%d item is consumed", food);
+	printf("\n%d items are consumed", food);
 }

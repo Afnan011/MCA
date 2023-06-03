@@ -1,4 +1,5 @@
-// C program to simulate the working of dining philosophers problem for 5 philosophers and with maximum 2 eaters
+// C program to simulate the working of dining philosophers problem for 5 philosophers 
+// and with maximum 2 eaters
 
 #include <stdio.h>
 #define NP 5			//NP->total number of plates
@@ -14,11 +15,11 @@ void main()
 	int wEat, eatP;		//wEat -> no. of philosophers wants to eat
 	//eatP -> which particular philoshopher is eating
 
-	printf("Enter how many philosphers wants to eat:");
+	printf("Enter how many philosophers wants to eat:");
 	scanf("%d", &wEat);
 	if (wEat == 1)
 	{
-		printf("\nEnter which philospher wants eat(0-4 values):");
+		printf("\nEnter which philosopher wants eat(0-4 values):");
 		scanf("%d", &eatP);
 		eat1(eatP);
 	}
@@ -36,16 +37,14 @@ void main()
 void forks(int eatP)
 {
 	int frk0, frk1;
+	frk0 = eatP;
+
 	if (eatP == 0)
-	{
-		frk0 = eatP;
 		frk1 = NP - 1;
-	}
+
 	else
-	{
-		frk0 = eatP;
 		frk1 = eatP - 1;
-	}
+
 	printf("\n%d can use Fork%d and Fork%d", eatP, frk0, frk1);
 }
 

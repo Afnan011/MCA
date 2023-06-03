@@ -49,7 +49,7 @@ void main()
         visited[i] = 0;
     }
 
-    /* Display the matrix :-> {Alloc, Max, need} */
+    // Display the matrix :-> {Alloc, Max, need} 
     printf("\nAllocation \t Max \t\t Need \n");
     for (i = 0; i < n; i++)
     {
@@ -78,8 +78,8 @@ void main()
     printf("\nAvail\n");
     for (i = 0; i < m; i++)
         printf(" %d ", avail[i]);
-
     printf("\n");
+
 
     // calculation part
     for (int count = 0; count < n; count++)
@@ -121,7 +121,7 @@ void main()
         if (visited[i] == 0)
         {
             state = 0;
-            printf("\nThe system is not safe");
+            printf("\nThe system is not in safe\n");
             break;
         }
     }
