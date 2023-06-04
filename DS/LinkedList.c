@@ -89,7 +89,6 @@ int countNode()
 
 void printList()
 {
-
     int n = countNode();
     if (n <= 0)
     {

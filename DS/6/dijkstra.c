@@ -34,7 +34,7 @@ void dijkstra(int s)
         {
             if (v[i] == 0 && d[u] + cost[u][i] < d[i])
             {
-                d[i] = cost[u][i];
+                d[i] = d[u] + cost[u][i];
                 p[i] = u;
             }
             
@@ -42,9 +42,6 @@ void dijkstra(int s)
         count++;
         
     }
-    
-    
-
 }
 
 void printMatrix()

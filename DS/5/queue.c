@@ -1,8 +1,7 @@
 #include<stdio.h>
-#include<stdbool.h>
 #define MAX 3
 
-bool isEmpty();
+int isEmpty();
 void Qinsert(int);
 void Qdelete();
 void display();
@@ -44,14 +43,14 @@ void main()
     
 }
 
-bool isEmpty()
+int isEmpty()
 {
     if ((front == -1) || (front > rear))
     {
-        return true;
+        return 1;
     }
-    else
-        return false;
+  
+    return 0;
         
 }
 
@@ -91,7 +90,7 @@ void Qinsert(int item)
 void Qdelete()
 {
 
-    if( isEmpty() )
+    if(isEmpty())
     {
         printf("\nQueue is Empty!\n");
         return;
