@@ -20,7 +20,6 @@ void main()
     op = exp;
     while (*op != '\0')
     {
-
         if (isdigit(*op))
         {
             res = *op - 48;

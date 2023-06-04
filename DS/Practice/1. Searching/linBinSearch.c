@@ -6,6 +6,7 @@ void linSearch(int target)
 {
     int flag, pos;
     flag = 0;
+    
     for (int i = 0; i < n; i++)
     {
         if (a[i] == target)
@@ -59,7 +60,7 @@ void binSearch(int target)
 
 void main()
 {
-    int target, ch = 1;
+    int target, ch;
 
     printf("Enter the size of the array: ");
     scanf("%d", &n);
@@ -98,6 +99,5 @@ void main()
     case 2:
         binSearch(target);
         break;
-        ;
     }
 }
