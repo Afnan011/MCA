@@ -55,7 +55,7 @@ void main()
             if (head == NULL)
             {
                 printf("\nList is empty\n");
-                break;;
+                break;
             }
             printf("Enter positon to be deleted: ");
             scanf("%d", &pos);
