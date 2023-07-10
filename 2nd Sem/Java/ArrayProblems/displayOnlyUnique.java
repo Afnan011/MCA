@@ -1,5 +1,7 @@
 package ArrayProblems;
 
+import java.util.HashMap;
+
 public class displayOnlyUnique {
     public int removeDuplicates(int[] nums) {
 
@@ -35,7 +37,7 @@ public class displayOnlyUnique {
 
         int[] a = { 1, 1, 2, 3 };
         int res = ls.removeDuplicates(a);
-
+        
         System.out.println("res = " + res);
 
     }
