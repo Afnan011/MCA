@@ -1,0 +1,426 @@
+Design an ER-diagram for the following scenario, Convert the same into a relational model and then solve the
+following queries. Consider a Cricket Tournament “ABC CUP” organized by an organization. In the tournament
+there are many teams are contesting each having a Teamid,Team_Name, City, a coach. Each team is uniquely
+identified by using Teamid. A team can have many Players and a captain. Each player is uniquely identified by
+Playerid, having a Name, and multiple phone numbers,age. A player represents only one team. There are many
+Stadiums to conduct 
+. Each stadium is identified using Stadiumid, having a stadium_name,Address (
+involves city,area_name,pincode). A team can play many matches. Each match played between the two teams in
+the scheduled date and time in the predefined Stadium. Each match is identified uniquely by using Matchid. Each
+match won by any of the one team that also wants to record in the database. For each match man_of_the match
+award given to a player.
+
+Execute the following Queries:
+i. Display the youngest player (in terms of age) Name, Team name, age in which he belongs of the
+tournament.
+ii. List the details of the stadium where the maximum number of matches were played.
+iii. List the details of the player who is not a captain but got the man_of _match award at least in two
+matches.
+iv. Display the Team details who won the maximum matches.
+v. Display the team name where all its won matches played in the same stadium.
+
+
+
+=================================================================================================================
+*create database VP22MC027_Tour;
+
+
+creating the tables;
+
+
+create table Team
+(
+	TeamId char(5),
+	TeamName varchar(25) NOT NULL,
+	City varchar(20),
+	Coach varchar(20),
+	
+	PRIMARY KEY(TeamId)	
+);
+
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| TeamId   | char(5)     | NO   | PRI | NULL    |       |
+| TeamName | varchar(25) | NO   |     | NULL    |       |
+| City     | varchar(20) | YES  |     | NULL    |       |
+| Coach    | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+
+create table Player
+(
+	PId char(5),
+	PName varchar(25) NOT NULL,
+	Age int(2),
+	TeamId char(5) NOT NULL,
+	
+	PRIMARY KEY(PId),
+	FOREIGN KEY(TeamId) REFERENCES Team(TeamId)
+);
+
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| PId    | char(5)     | NO   | PRI | NULL    |       |
+| PName  | varchar(25) | NO   |     | NULL    |       |
+| Age    | int         | YES  |     | NULL    |       |
+| TeamId | char(5)     | NO   | MUL | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+
+
+create table PhoneNumbers
+(
+	PId char(5),
+	PhoneNo char(10),
+	
+	FOREIGN KEY(PId) REFERENCES Player(PId)
+);
+
++---------+----------+------+-----+---------+-------+
+| Field   | Type     | Null | Key | Default | Extra |
++---------+----------+------+-----+---------+-------+
+| PId     | char(5)  | YES  | MUL | NULL    |       |
+| PhoneNo | char(10) | YES  |     | NULL    |       |
++---------+----------+------+-----+---------+-------+
+
+
+
+create table Stadium
+(
+	SId char(5),
+	SName varchar(25) NOT NULL,
+	City varchar(20),
+	Area varchar(20),
+	PinCode int(6),
+	
+	PRIMARY KEY(SId)
+);
+
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| SId     | char(5)     | NO   | PRI | NULL    |       |
+| SName   | varchar(25) | NO   |     | NULL    |       |
+| City    | varchar(20) | YES  |     | NULL    |       |
+| Area    | varchar(20) | YES  |     | NULL    |       |
+| PinCode | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+
+
+create table Matches
+(
+	MId char(5),
+	TeamId1 char(5),
+	TeamId2 char(5),
+	SId char(5),
+	Date date,
+	Time time,
+	WinId char(5),
+	MoMId char(5),
+	
+	PRIMARY KEY(MId),
+	FOREIGN KEY(TeamId1) REFERENCES Team(TeamId),	
+	FOREIGN KEY(TeamId2) REFERENCES Team(TeamId),
+	FOREIGN KEY(SId) REFERENCES Stadium(SId),
+	FOREIGN KEY(WinID) REFERENCES Team(TeamId),
+	FOREIGN KEY(MoMId) REFERENCES Player(PId)
+);
+
+
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| MId     | char(5) | NO   | PRI | NULL    |       |
+| TeamId1 | char(5) | YES  | MUL | NULL    |       |
+| TeamId2 | char(5) | YES  | MUL | NULL    |       |
+| SId     | char(5) | YES  | MUL | NULL    |       |
+| Date    | date    | YES  |     | NULL    |       |
+| Time    | time    | YES  |     | NULL    |       |
+| WinId   | char(5) | YES  | MUL | NULL    |       |
+| MoMId   | char(5) | YES  | MUL | NULL    |       |
++---------+---------+------+-----+---------+-------+
+
+
+
+create table Captain
+(
+	TeamId char(5),
+	PId char(5),
+	
+	PRIMARY KEY(TeamId),
+	FOREIGN KEY(PId) REFERENCES Player(PId)	
+);
+
+
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| TeamId | char(5) | NO   | PRI | NULL    |       |
+| PId    | char(5) | YES  | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+Inserting data
+
+
+insert into Team values
+('T1', 'Strikers', 'Nellyadi', 'Manoj'),
+('T2', 'Hitters', 'Nellyadi', 'Manoj'),
+('T3', 'Blasters', 'Puttur', 'Tripati'),
+('T4', 'Rockers', 'BC Road', 'Ganesh'),
+('T5', 'Finishers', 'Uppinangady', 'Dheeraj');
+
++--------+-----------+-------------+---------+
+| TeamId | TeamName  | City        | Coach   |
++--------+-----------+-------------+---------+
+| T1     | Strikers  | Nellyadi    | Manoj   |
+| T2     | Hitters   | Nellyadi    | Manoj   |
+| T3     | Blasters  | Puttur      | Tripati |
+| T4     | Rockers   | BC Road     | Ganesh  |
+| T5     | Finishers | Uppinangady | Dheeraj |
++--------+-----------+-------------+---------+
+
+
+insert into Player values
+('P01', 'Akash', 23, 'T1'),
+('P02', 'Anirudha', 26, 'T1'),
+('P03', 'Afnan', 29, 'T1'),
+('P04', 'Mubasshir', 32, 'T2'),
+('P05', 'Ankith', 31, 'T2'),
+('P06', 'Lavin', 31, 'T2'),
+('P07', 'Bharath', 29, 'T3'),
+('P08', 'Nabeel', 27, 'T3'),
+('P09', 'Vishnu', 26, 'T3'),
+('P10', 'Dinesh', 26, 'T4'),
+('P11', 'Ganesh', 26, 'T4'),
+('P12', 'Neeraj', 28, 'T4'),
+('P13', 'Suresh', 35, 'T5'),
+('P14', 'Sumesh', 32, 'T5'),
+('P15', 'Redddy', 30, 'T5');
+
++-----+-----------+------+--------+
+| PId | PName     | Age  | TeamId |
++-----+-----------+------+--------+
+| P01 | Akash     |   23 | T1     |
+| P02 | Anirudha  |   26 | T1     |
+| P03 | Afnan     |   29 | T1     |
+| P04 | Mubasshir |   32 | T2     |
+| P05 | Ankith    |   31 | T2     |
+| P06 | Lavin     |   31 | T2     |
+| P07 | Bharath   |   29 | T3     |
+| P08 | Nabeel    |   27 | T3     |
+| P09 | Vishnu    |   26 | T3     |
+| P10 | Dinesh    |   26 | T4     |
+| P11 | Ganesh    |   26 | T4     |
+| P12 | Neeraj    |   28 | T4     |
+| P13 | Suresh    |   35 | T5     |
+| P14 | Sumesh    |   32 | T5     |
+| P15 | Redddy    |   30 | T5     |
++-----+-----------+------+--------+
+
+
+
+insert into PhoneNumbers values
+('P01', '9874564012'),
+('P02', '9874564012'),
+('P03', '9812745640'),
+('P03', '9640812745'),
+('P04', '9018745642'),
+('P05', '4019874562'),
+('P05', '8408456192'),
+('P06', '5698744012'),
+('P07', '7456984012'),
+('P08', '6498745012'),
+('P08', '9496745012'),
+('P09', '8745640912'),
+('P10', '8745649012'),
+('P11', '9128745640'),
+('P12', '8745640129'),
+('P12', '7081294564'),
+('P13', '9640128745'),
+('P14', '9128745640'),
+('P15', '9012874564');
+
+
++------+------------+
+| PId  | PhoneNo    |
++------+------------+
+| P01  | 9874564012 |
+| P02  | 9874564012 |
+| P03  | 9812745640 |
+| P03  | 9640812745 |
+| P04  | 9018745642 |
+| P05  | 4019874562 |
+| P05  | 8408456192 |
+| P06  | 5698744012 |
+| P07  | 7456984012 |
+| P08  | 6498745012 |
+| P08  | 9496745012 |
+| P09  | 8745640912 |
+| P10  | 8745649012 |
+| P11  | 9128745640 |
+| P12  | 8745640129 |
+| P12  | 7081294564 |
+| P13  | 9640128745 |
+| P14  | 9128745640 |
+| P15  | 9012874564 |
++------+------------+
+
+
+insert into Stadium values
+('S01', 'ABC Stadium', 'Puttur', 'Darbe', 574201),
+('S02', 'KRS Stadium', 'Uppinangady', 'Perne', 574210),
+('S03', 'BLR Stadium', 'Gundya', 'Nelyadi', 574229);
+
++-----+-------------+-------------+---------+---------+
+| SId | SName       | City        | Area    | PinCode |
++-----+-------------+-------------+---------+---------+
+| S01 | ABC Stadium | Puttur      | Darbe   |  574201 |
+| S02 | KRS Stadium | Uppinangady | Perne   |  574210 |
+| S03 | BLR Stadium | Gundya      | Nelyadi |  574229 |
++-----+-------------+-------------+---------+---------+
+
+
+insert into Captain values
+('T1', 'P01'),
+('T2', 'P04'),
+('T3', 'P07'),
+('T4', 'P10'),
+('T5', 'P13');
+
++--------+------+
+| TeamId | PId  |
++--------+------+
+| T1     | P01  |
+| T2     | P04  |
+| T3     | P07  |
+| T4     | P10  |
+| T5     | P13  |
++--------+------+
+
+
+insert into Matches values
+('M01', 'T1', 'T2', 'S01', '2023-08-10', '08:00:00', 'T1', 'P03'),
+('M02', 'T3', 'T4', 'S02', '2023-08-11', '08:00:00', 'T3', 'P09'),
+('M03', 'T1', 'T3', 'S03', '2023-08-12', '08:00:00', 'T1', 'P03'),
+('M04', 'T2', 'T4', 'S01', '2023-08-13', '08:00:00', 'T2', 'P06'),
+('M05', 'T2', 'T5', 'S02', '2023-08-14', '08:00:00', 'T2', 'P06'),
+('M06', 'T1', 'T2', 'S02', '2023-08-15', '08:00:00', 'T1', 'P03'),
+('M07', 'T4', 'T5', 'S02', '2023-08-14', '08:00:00', 'T5', 'P13'),
+('M08', 'T4', 'T5', 'S02', '2023-08-14', '08:00:00', 'T5', 'P15');
+
+
++-----+---------+---------+------+------------+----------+-------+-------+
+| MId | TeamId1 | TeamId2 | SId  | Date       | Time     | WinId | MoMId |
++-----+---------+---------+------+------------+----------+-------+-------+
+| M01 | T1      | T2      | S01  | 2023-08-10 | 08:00:00 | T1    | P03   |
+| M02 | T3      | T4      | S02  | 2023-08-11 | 08:00:00 | T3    | P09   |
+| M03 | T1      | T3      | S03  | 2023-08-12 | 08:00:00 | T1    | P03   |
+| M04 | T2      | T4      | S01  | 2023-08-13 | 08:00:00 | T2    | P06   |
+| M05 | T2      | T5      | S02  | 2023-08-14 | 08:00:00 | T2    | P06   |
+| M06 | T1      | T2      | S02  | 2023-08-15 | 08:00:00 | T1    | P03   |
++-----+---------+---------+------+------------+----------+-------+-------+
+
+===================================================================================================================
+
+Queries
+
+
+i. Display the youngest player (in terms of age) Name, Team name, age in which he belongs of the
+tournament.
+select PName, TeamName, Age 
+	from Player p 
+	JOIN Team t 
+	ON p.TeamId = t.TeamId
+	where Age = ( select min(age) as Age from Player);
+
++-------+----------+------+
+| PName | TeamName | Age  |
++-------+----------+------+
+| Akash | Strikers |   23 |
++-------+----------+------+
+
+
+
+ii. List the details of the stadium where the maximum number of matches were played.
+
+select count(*) from Matches 
+	group by SId;
+
+select m.SId, SName, City, Area, count(*) as TotalMatches
+	FROM Matches m
+	JOIN Stadium s 
+	ON s.SId = m.SId
+	GROUP BY m.SId, SName, City, Area
+	ORDER BY TotalMatches DESC limit 1;
+
++------+-------------+-------------+-------+--------------+
+| SId  | SName       | City        | Area  | TotalMatches |
++------+-------------+-------------+-------+--------------+
+| S02  | KRS Stadium | Uppinangady | Perne |            3 |
++------+-------------+-------------+-------+--------------+
+
+
+iii. List the details of the player who is not a captain but got the man_of _match award at least in two
+matches.
+	
+select * FROM Player
+    where PId NOT IN (select PId from Captain)
+    AND PId IN (select PId
+        FROM Player p
+        JOIN Matches m
+        ON p.PId = m.MomId
+        GROUP BY MomId
+        HAVING count(PId)>1);
+
++-----+-------+------+--------+
+| PId | PName | Age  | TeamId |
++-----+-------+------+--------+
+| P03 | Afnan |   29 | T1     |
+| P06 | Lavin |   31 | T2     |
++-----+-------+------+--------+
+
+
+
+iv. Display the Team details who won the maximum matches.
+
+select WinId as TeamID, TeamName, count(WinId) as TotalWins 
+    FROM Team t
+    JOIN Matches m
+    ON t.TeamId = m.WinId
+    GROUP BY WinId
+    ORDER BY TotalWins DESC 
+    LIMIT 1;
+    
++--------+----------+-----------+
+| TeamID | TeamName | TotalWins |
++--------+----------+-----------+
+| T1     | Strikers |         3 |
++--------+----------+-----------+
+  
+
+
+
+v. Display the team name where all its won matches played in the same stadium.
+
+select WinId as TeamID, TeamName, SId, count(SId) as TotalMatches
+    FROM Matches m
+    JOIN Team t
+    ON t.TeamId = m.WinId
+    GROUP BY WinId, SId
+    HAVING count(*) > 1;
+
++--------+-----------+------+--------------+
+| TeamID | TeamName  | SId  | TotalMatches |
++--------+-----------+------+--------------+
+| T5     | Finishers | S02  |            2 |
++--------+-----------+------+--------------+
+
+
+
+
+

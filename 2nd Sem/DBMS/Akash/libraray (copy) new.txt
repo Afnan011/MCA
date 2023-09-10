@@ -1,0 +1,261 @@
+1 Create the following tables with properly specifying Primary keys, Foreign keys and solve the following queries.
+
+BRANCH (Branchid, Branchname, HOD)
+STUDENT (USN, Name, Address, Branchid, sem)
+BOOK (Bookid, Bookname, Authorid, Publisher, Branchid)
+AUTHOR (Authorid, Authorname, Country, age)
+BORROW (USN, Bookid, Borrowed_Date)
+Execute the following Queries:
+i.List the details of Students who are all studying in 2nd sem MCA.
+ii.List the students who are not borrowed any books.
+iii. Display the USN, Student name, Branch_name, Book_name, Author_name, Books_Borrowed_Date of 2nd
+sem MCA Students who borrowed books.
+iv. Display the number of books written by each Author.
+v.Display the student details who borrowed more than two books.
+vi.Display the student details who borrowed books of more than one Author.
+vii.Display the Book names in descending order of their names.
+viii.List the details of students who borrowed the books which are all published by the same publisher.
+
+
+mysql> create database library;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use library;
+Database changed
+
+mysql> create table Branch( BranchId char(5),BranchName varchar(10) NOT NULL,HOD varchar(25),Primary Key(BranchId));
+Query OK, 0 rows affected (0.01 sec)
+
+
+mysql> create table Student(Usn char(10),Sname varchar(25) NOT NULL,Address varchar(25),BranchId char(5),Sem int(1),Primary Key(Usn),Foreign Key(BranchId) references Branch(BranchId));
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+
+mysql> create table Author(AuthorId char(5),AuthorName varchar(25) NOT NULL,Country varchar(20),Age int(2),Primary Key (AuthorId));
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+
+mysql> create table Book(BookId char(5),BookName varchar(25),AuthorId char(5),Publisher varchar(25),BranchId char(5),Primary Key (BookId),Foreign Key (AuthorId) references Author(AuthorId),Foreign Key (BranchId) references Branch(BranchId));
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> create table Borrow(Usn char(10),BookId char(5),Borrowed_Date date,Foreign Key(BookId) references Book(BookId),Foreign Key(Usn) references Student(Usn));
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> Insert into  Branch values("BR001","MCA","Kumar");
+Query OK, 1 row affected (0.00 sec)
+
+
+mysql> Insert into  Branch values("BR002","MBA","Harsha");
+Query OK, 1 row affected (0.00 sec)
+
+
+mysql> Insert into  Branch values("BR003","EC","Xavior");
+Query OK, 1 row affected (0.00 sec)
+
+
+mysql> select * from Branch;
++----------+------------+--------+
+| BranchId | BranchName | HOD    |
++----------+------------+--------+
+| BR001    | MCA        | Kumar  |
+| BR002    | MBA        | Harsha |
+| BR003    | EC         | Xavior |
++----------+------------+--------+
+3 rows in set (0.00 sec)
+
+
+mysql> Insert into  Student values("4VP22MC001","Akash","Mottethadka","BR001",1),("4VP22MC004","Anirudha","BCRoad","BR003",1),("4VP22MC027","Afnan","Nelyadi","BR001",1),("4VP22MC028","Mubassir","SaraliKatte","BR002",1),("4VP22MC031","Gopal","Kavu","BR003",1),("4VP22MC016","Manohar","Sulya","BR001",2),("4VP22MC018","Gahan","Bellare","BR001",2);
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from Student;
++------------+----------+-------------+----------+------+
+| Usn        | Sname    | Address     | BranchId | Sem  |
++------------+----------+-------------+----------+------+
+| 4VP22MC001 | Akash    | Mottethadka | BR001    |    1 |
+| 4VP22MC004 | Anirudha | BCRoad      | BR003    |    1 |
+| 4VP22MC016 | Manohar  | Sulya       | BR001    |    2 |
+| 4VP22MC018 | Gahan    | Bellare     | BR001    |    2 |
+| 4VP22MC027 | Afnan    | Nelyadi     | BR001    |    1 |
+| 4VP22MC028 | Mubassir | SaraliKatte | BR002    |    1 |
+| 4VP22MC031 | Gopal    | Kavu        | BR003    |    1 |
++------------+----------+-------------+----------+------+
+7 rows in set (0.00 sec)
+
+mysql> Insert into  Author values("AU001","Krishna","India",50),("AU002","Firoz","Afghanisthan",64),("AU003","Bhagath","India",50);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from Author;
++----------+------------+--------------+------+
+| AuthorId | AuthorName | Country      | Age  |
++----------+------------+--------------+------+
+| AU001    | Krishna    | India        |   50 |
+| AU002    | Firoz      | Afghanisthan |   64 |
+| AU003    | Bhagath    | India        |   50 |
++----------+------------+--------------+------+
+3 rows in set (0.00 sec)
+
+mysql> Insert into Book values("BK001","TheFire","AU002","AfghPublishers","BR002"),("BK002","Java OOPs","AU001","NewPublishers","BR001"),("BK003","C++ Introduction","AU002","PrintIt","BR001"),("BK004","Into the verse","AU003","IndianExprs","BR002"),("BK005","Day of life","AU001","NewWorkers","BR003"),("BK006","Chapter1","AU003","JacksonP","BR002"),("BK007","Chapter3","AU003","JacksonP","BR002");
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from Book;
++--------+------------------+----------+----------------+----------+
+| BookId | BookName         | AuthorId | Publisher      | BranchId |
++--------+------------------+----------+----------------+----------+
+| BK001  | TheFire          | AU002    | AfghPublishers | BR002    |
+| BK002  | Java OOPs        | AU001    | NewPublishers  | BR001    |
+| BK003  | C++ Introduction | AU002    | PrintIt        | BR001    |
+| BK004  | Into the verse   | AU003    | IndianExprs    | BR002    |
+| BK005  | Day of life      | AU001    | NewWorkers     | BR003    |
+| BK006  | Chapter1         | AU003    | JacksonP       | BR002    |
+| BK007  | Chapter3         | AU003    | JacksonP       | BR002    |
++--------+------------------+----------+----------------+----------+
+7 rows in set (0.00 sec)
+
+mysql> Insert into Borrow values("4VP22MC001","BK001","2023-07-15"),("4VP22MC031","BK002","2023-07-05"),("4VP22MC004","BK003","2023-06-25"),("4VP22MC016","BK004","2023-08-01"),("4VP22MC001","BK005","2023-08-03"),("4VP22MC001","BK006","2023-08-03"),("4VP22MC031","BK007","2023-08-04");
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from Borrow;
++------------+--------+---------------+
+| Usn        | BookId | Borrowed_Date |
++------------+--------+---------------+
+| 4VP22MC001 | BK001  | 2023-07-15    |
+| 4VP22MC031 | BK002  | 2023-07-05    |
+| 4VP22MC004 | BK003  | 2023-06-25    |
+| 4VP22MC016 | BK004  | 2023-08-01    |
+| 4VP22MC001 | BK005  | 2023-08-03    |
+| 4VP22MC001 | BK006  | 2023-08-03    |
+| 4VP22MC031 | BK007  | 2023-08-04    |
++------------+--------+---------------+
+7 rows in set (0.00 sec)
+
+-----------------------------------------------------------------------------------------------------------------------
+
+i.List the details of Students who are all studying in 2nd sem MCA.
+
+mysql> select * from Student, Branch where Student.BranchId=Branch.BranchId and BranchName="MCA" and Sem=2;
++------------+---------+---------+----------+------+----------+------------+-------+
+| Usn        | Sname   | Address | BranchId | Sem  | BranchId | BranchName | HOD   |
++------------+---------+---------+----------+------+----------+------------+-------+
+| 4VP22MC016 | Manohar | Sulya   | BR001    |    2 | BR001    | MCA        | Kumar |
+| 4VP22MC018 | Gahan   | Bellare | BR001    |    2 | BR001    | MCA        | Kumar |
++------------+---------+---------+----------+------+----------+------------+-------+
+2 rows in set (0.00 sec)
+
+
+ii.List the students who are not borrowed any books.
+
+mysql> select * from Student where Usn not in(select Usn from Borrow);
++------------+----------+-------------+----------+------+
+| Usn        | Sname    | Address     | BranchId | Sem  |
++------------+----------+-------------+----------+------+
+| 4VP22MC018 | Gahan    | Bellare     | BR001    |    2 |
+| 4VP22MC027 | Afnan    | Nelyadi     | BR001    |    1 |
+| 4VP22MC028 | Mubassir | SaraliKatte | BR002    |    1 |
++------------+----------+-------------+----------+------+
+3 rows in set (0.00 sec)
+
+
+iii. Display the USN, Student name, Branch_name, Book_name, Author_name, Books_Borrowed_Date of 2nd
+sem MCA Students who borrowed books.
+
+SELECT St.Usn, St.Sname, Br.BranchName, Bo.BookName, A.AuthorName, B.Borrowed_date
+FROM Student St, Branch Br, Book Bo, Author A, Borrow B
+WHERE St.Sem = 2 
+    AND Br.BranchName = "MCA" 
+    AND A.Authorid = Bo.Authorid 
+    AND St.Usn = B.Usn 
+    AND B.BookId IS NOT NULL 
+    AND B.BookId = Bo.BookId 
+    AND Br.BranchId = St.BranchId
+ORDER BY St.Usn;
+
++------------+---------+------------+----------------+------------+---------------+
+| Usn        | Sname   | BranchName | BookName       | AuthorName | Borrowed_date |
++------------+---------+------------+----------------+------------+---------------+
+| 4VP22MC016 | Manohar | MCA        | Into the verse | Bhagath    | 2023-08-01    |
++------------+---------+------------+----------------+------------+---------------+
+
+
+iv. Display the number of books written by each Author.
+
+mysql> select A.Authorid,A.AuthorName,count(*) As BooksWritten From Author A,Book B where A.Authorid=B.Authorid Group by Authorid;
++----------+------------+--------------+
+| Authorid | AuthorName | BooksWritten |
++----------+------------+--------------+
+| AU001    | Krishna    |            2 |
+| AU002    | Firoz      |            2 |
+| AU003    | Bhagath    |            3 |
++----------+------------+--------------+
+3 rows in set (0.00 sec)
+
+
+v.Display the student details who borrowed more than two books.
+
+mysql> select s.Usn,s.Sname,count(*) As Borrowed from Student s,Borrow b 
+            where s.Usn=b.Usn 
+            group by s.Usn,s.Sname 
+            having count(*)>2;
+            
++------------+-------+----------+
+| Usn        | Sname | Borrowed |
++------------+-------+----------+
+| 4VP22MC001 | Akash |        3 |
++------------+-------+----------+
+1 row in set (0.00 sec)
+
+
+vi.Display the student details who borrowed books of more than one Author.
+
+mysql> select s.Usn,s.Sname from Student s,Borrow b,Book as bk 
+            where s.Usn=b.Usn 
+            and b.BookId=bk.BookId 
+            group by s.Usn,s.Sname 
+            having count(distinct bk.Authorid)>1;
+            
++------------+-------+
+| Usn        | Sname |
++------------+-------+
+| 4VP22MC001 | Akash |
+| 4VP22MC031 | Gopal |
++------------+-------+
+2 rows in set (0.00 sec)
+
+
+vii.Display the Book names in descending order of their names.
+
+mysql> select BookName from Book Order By BookName desc;
++------------------+
+| BookName         |
++------------------+
+| TheFire          |
+| Java OOPs        |
+| Into the verse   |
+| Day of life      |
+| Chapter3         |
+| Chapter1         |
+| C++ Introduction |
++------------------+
+7 rows in set (0.00 sec)
+
+
+viii.List the details of students who borrowed the books which are all published by the same publisher.
+
+select Student.Usn,SName from Student,Borrow,Book where
+    Student.Usn=Borrow.Usn and
+    Borrow.BookId=Book.BookId and
+    Publisher="JacksonP"
+    group by Student.Usn,Student.SName;
+
++------------+-------+
+| Usn        | SName |
++------------+-------+
+| 4VP22MC001 | Akash |
+| 4VP22MC031 | Gopal |
++------------+-------+
+2 rows in set (0.00 sec)

@@ -1,0 +1,306 @@
+1 Create the following tables with properly specifying Primary keys, Foreign keys and solve the following queries.
+
+BRANCH (Branchid, Branchname, HOD)
+STUDENT (USN, Name, Address, Branchid, sem)
+BOOK (Bookid, Bookname, Authorid, Publisher, Branchid)
+AUTHOR (Authorid, Authorname, Country, age)
+BORROW (USN, Bookid, Borrowed_Date)
+Execute the following Queries:
+i.List the details of Students who are all studying in 2nd sem MCA.
+ii.List the students who are not borrowed any books.
+iii. Display the USN, Student name, Branch_name, Book_name, Author_name, Books_Borrowed_Date of 2nd
+sem MCA Students who borrowed books.
+iv. Display the number of books written by each Author.
+v.Display the student details who borrowed more than two books.
+vi.Display the student details who borrowed books of more than one Author.
+vii.Display the Book names in descending order of their names.
+viii.List the details of students who borrowed the books which are all published by the same publisher.
+
+#creating tables
+
+create table Branch
+(
+	BranchId char(5),
+	BranchName varchar(20) UNIQUE,
+	HOD varchar(20),
+	PRIMARY KEY(BranchId)
+);
+
+create table Student
+(
+	USN char(10),
+	Name varchar(20) NOT NULL,
+	Address varchar(25),
+	BranchId char(5),
+	Sem int(1),
+	
+	PRIMARY KEY(USN),
+	FOREIGN KEY(BranchId) references Branch(BranchId)
+);
+
+create table Author
+(
+	AuthorId char(5),
+	AuthorName varchar(20) NOT NULL,
+	Country varchar(10),
+	age int(2),
+	
+	PRIMARY KEY(AuthorId)
+);
+
+
+create table Book
+(
+	BookId char(5),
+	BookName varchar(25) NOT NULL,
+	AuthorId char(5),
+	Publisher varchar(20),
+	BranchId char(5),
+	
+	PRIMARY KEY(BookId),
+	FOREIGN KEY(AuthorId) references Author(AuthorId),
+	FOREIGN KEY(BranchId) references Branch(BranchId)
+);
+
+
+create table Borrow
+(
+	USN char(10),
+	BookId char(5),
+	BorrowedDate date,
+	
+	FOREIGN KEY(BookId) references Book(BookId),
+	FOREIGN KEY(USN) references Student(USN)
+);
+
+
+
+===============================================================================================
+#inserting
+
+
+
+insert into Branch values("BR001", "MCA", "Kumar");
+insert into Branch values("BR002", "MBA", "Bhaskar");
+insert into Branch values("BR003", "MSc", "Suresh");
+
+
+insert into Student values
+("4VP22MC001", "Akash", "Mottettadka", "BR001", 1),
+("4VP22MC002", "Afnan", "Nellyadi", "BR001", 2),
+("4VP22MC003", "Mubassir", "Uppinangady", "BR001", 2),
+("4VP22MC004", "Anirudha", "BC Road", "BR002", 1),
+("4VP22MC005", "Vinodh", "Sulya", "BR003", 1);
+
+
+insert into Student values
+("4VP22MC006", "Avinash", "Mottettadka", "BR002", 1),
+("4VP22MC007", "Arun", "Nellyadi", "BR001", 2),
+("4VP22MC008", "Adesh", "Uppinangady", "BR002", 2),
+("4VP22MC009", "Farook", "BC Road", "BR001", 1),
+("4VP22MC010", "Kiran", "Sulya", "BR003", 1);
+
+
+insert into Author values
+("AU001", "Franklin", "India", 45),
+("AU002", "Trevor", "USA", 55),
+("AU003", "Micheal", "India", 53);
+
+
+insert into Book values
+("BK001", "Modern C++", "AU001", "NewPublications", "BR001"),
+("BK002", "Wings of Fire","AU001", "STM Publications", "BR001"),
+("BK003", "Jobs", "AU002", "ElectroPrint", "BR002"),
+("BK004", "OOPs Using Java", "AU003", "ElectroPrint", "BR003");
+
+
+insert into Borrow values
+("4VP22MC005", "Bk001", "2022-05-27"),
+("4VP22MC006", "Bk001", "2022-06-12"),
+("4VP22MC005", "Bk003", "2022-06-11"),
+("4VP22MC006", "Bk004", "2022-06-12"),
+("4VP22MC003", "Bk002", "2022-04-17");
+
+insert into Borrow values
+("4VP22MC005", "Bk001", "2022-05-21"),
+("4VP22MC006", "Bk002", "2022-04-03");
+
+insert into Borrow values
+("4VP22MC010", "Bk006", "2022-05-21"),
+("4VP22MC010", "Bk007", "2022-06-11");
+
+insert into Borrow values
+("4VP22MC003", "Bk006", "2022-05-18"),
+("4VP22MC003", "Bk007", "2022-06-10");
+
+insert into Borrow values
+("4VP22MC009", "Bk006", "2022-05-18");
+
+================================================================
+#Questions
+
+1. List the details of students who are all studying in 2nd sem MCA.
+
+select * from Student as s, Branch as b
+	where s.BranchId = b.BranchId 
+	AND BranchName = 'MCA' 
+	AND Sem = 2;
+		
++------------+----------+-------------+----------+------+----------+------------+-------+
+| USN        | Name     | Address     | BranchId | Sem  | BranchId | BranchName | HOD   |
++------------+----------+-------------+----------+------+----------+------------+-------+
+| 4VP22MC002 | Afnan    | Nellyadi    | BR001    |    2 | BR001    | MCA        | Kumar |
+| 4VP22MC003 | Mubassir | Uppinangady | BR001    |    2 | BR001    | MCA        | Kumar |
+| 4VP22MC007 | Arun     | Nellyadi    | BR001    |    2 | BR001    | MCA        | Kumar |
++------------+----------+-------------+----------+------+----------+------------+-------+
+
+
+2.List the students who are not borrowed any books.	
+select USN, Name, Address from Student 
+    where USN not in (select USN from Borrow);
+	
+select USN, Name, Address from Student 
+    where USN not in (select USN from Borrow);
+
++------------+----------+-------------+
+| USN        | Name     | Address     |
++------------+----------+-------------+
+| 4VP22MC001 | Akash    | Mottettadka |
+| 4VP22MC002 | Afnan    | Nellyadi    |
+| 4VP22MC004 | Anirudha | BC Road     |
+| 4VP22MC007 | Arun     | Nellyadi    |
+| 4VP22MC008 | Adesh    | Uppinangady |
+| 4VP22MC009 | Farook   | BC Road     |
++------------+----------+-------------+
+6 rows in set (0.01 sec)
+
+
+
+3. Display the USN, Student name, Branch_name, Book_name, Author_name, Books_Borrowed_Date of 2nd
+sem MCA Students who borrowed books.
+
+select s.USN, Name, BranchName, BookName, AuthorName, BorrowedDate 
+        from Branch br, Student s, Book bk, Author a, Borrow bo
+    where br.BranchId = bk.BranchId
+    and s.BranchId = bk.BranchId
+    and s.USN = bo.USN
+    and bk.AuthorId = a.AuthorId
+    and bo.BookId = bk.BookId
+    and br.BranchName = 'MCA'
+    and s.Sem = 2;
+    
++------------+----------+------------+---------------+------------+--------------+
+| USN        | Name     | BranchName | BookName      | AuthorName | BorrowedDate |
++------------+----------+------------+---------------+------------+--------------+
+| 4VP22MC003 | Mubassir | MCA        | Wings of Fire | Franklin   | 2022-04-17   |
++------------+----------+------------+---------------+------------+--------------+
+
+
+4. Display the number of books written by each Author.
+select b.AuthorId, AuthorName, count(*) as Total from Book as b
+	Join Author as a
+	ON b.AuthorId = a.AuthorId
+	group by AuthorId, AuthorName; 
+	
++----------+------------+-------+
+| AuthorId | AuthorName | Total |
++----------+------------+-------+
+| AU001    | Franklin   |     2 |
+| AU002    | Trevor     |     1 |
+| AU003    | Micheal    |     1 |
++----------+------------+-------+
+
+
+5.Display the student details who borrowed more than two books.
+select s.USN, Name, count(*) as Borrowed from Student s, Borrow b
+        where s.USN = b.USN
+        group by s.USN, Name
+        having count(*)>2;
+        
++------------+----------+----------+
+| USN        | Name     | Borrowed |
++------------+----------+----------+
+| 4VP22MC003 | Mubassir |        3 |
+| 4VP22MC005 | Vinodh   |        3 |
+| 4VP22MC006 | Avinash  |        3 |
++------------+----------+----------+
+
+
+6. Display the student details who borrowed books of more than one Author.
+select s.USN, Name from Student s, Borrow b, Book bk
+    where s.USN = b.USN
+    and b.BookId = bk.BookId
+    group by s.USN, Name
+    having count(distinct AuthorId)>1;
+    
++------------+---------+
+| USN        | Name    |
++------------+---------+
+| 4VP22MC005 | Vinodh  |
+| 4VP22MC006 | Avinash |
++------------+---------+
+
+
+7. Display the book names in descending order of their name
+
+select BookName Book ORDER By BookName DESC; 
+
++-----------------+
+| BookName        |
++-----------------+
+| Wings of Fire   |
+| OOPs Using Java |
+| Modern C++      |
+| Jobs            |
++-----------------+
+
+
+8. List the details of students who borrowed the books which are all published by the same publisher
+
+
+SELECT s.USN, Name, count(*) as BooksBorrowed, Publisher FROM Student s
+JOIN Borrow br ON s.USN = br.USN 
+JOIN Book bk ON  br.BookId = bk.BookId
+
+    WHERE s.USN IN (
+        SELECT USN FROM Borrow b1
+        JOIN Book b2 ON b1.Bookid = b2.Bookid
+        GROUP BY USN
+        HAVING COUNT(DISTINCT Publisher) = 1)
+    GROUP BY s.USN, Name, Publisher;
+
++------------+--------+---------------+-----------+
+| USN        | Name   | BooksBorrowed | Publisher |
++------------+--------+---------------+-----------+
+| 4VP22MC010 | Kiran  |             2 | JacksonP  |
+| 4VP22MC009 | Farook |             1 | JacksonP  |
++------------+--------+---------------+-----------+
+
+
+
+
+8. List the details of students who borrowed the books which are all published by the same publisher
+#just display their USN and Name
+
+select USN, Name from Student s
+    where USN IN(
+        select USN from Borrow b1
+        JOIN Book b2 ON b1.BookId = b2.BookId
+        GROUP BY USN
+        HAVING COUNT(distinct Publisher) = 1
+    );
+
++------------+--------+
+| USN        | Name   |
++------------+--------+
+| 4VP22MC009 | Farook |
+| 4VP22MC010 | Kiran  |
++------------+--------+
+
+
+
+
+
+
+
+

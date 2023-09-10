@@ -1,0 +1,190 @@
+Consider the following schema: STUDENT (USN, name, date_of_birth, branch, mark1, mark2, mark3, total,
+GPA) 
+Execute the following queries: 
+i. Update the column total by adding the columns mark1, mark2, mark3. 
+ii.Find the GPA score of all the students. 
+iii. Find the students who born on a particular year of birth from the date_of_birth column. 
+iv. List the students who are studying in a particular branch of study. 
+v. Find the maximum GPA score of the student branch-wise. 
+vi. Find the students whose name starts with the alphabet “S”. 
+vii. Find the students whose name ends with the alphabets “AR”. 
+viii. Delete the student details whose USN is given as 1001
+
+create table Student
+(
+	Usn char(5),
+	Sname varchar(25) NOT NULL,
+	Dob date,
+	Branch varchar(20),
+	M1 int(3),
+	M2 int(3),
+	M3 int(3),
+	Primary Key(Usn)
+);
+
+Insert into Student values
+('1001','Akash','2001-05-25','MCA',92,85,88),
+('1002','Bharath','2001-02-21','MCA',97,77,88),
+('1003','Gireesh','2001-09-12','MBA',76,65,68),
+('1004','Suresh','2001-05-28','MTECH',88,85,81),
+('1005','Xaviar','2000-11-13','MTECH',98,55,71),
+('1006','Anvith','2001-09-15','MBA',76,65,68),
+('1007','Jagath','2001-02-28','MTECH',88,76,89),
+('1008','Zabar','2001-12-13','MTECH',45,55,72),
+('1009','Zubair','2000-10-26','MCA',85,51,73)
+;
+
+Insert into Student values
+('1009','Zubair','2000-10-26','MCA',85,51,73,209);
+
+select * from Student;
++------+---------+------------+--------+------+------+------+-------+
+| Usn  | Sname   | Dob        | Branch | M1   | M2   | M3   | Total |
++------+---------+------------+--------+------+------+------+-------+
+| 1001 | Akash   | 2001-05-25 | MCA    |   92 |   85 |   88 |   265 |
+| 1002 | Bharath | 2001-02-21 | MCA    |   97 |   77 |   88 |   262 |
+| 1003 | Gireesh | 2001-09-12 | MBA    |   76 |   65 |   68 |   209 |
+| 1004 | Suresh  | 2001-05-28 | MTECH  |   88 |   85 |   81 |   254 |
+| 1005 | Xaviar  | 2000-11-13 | MTECH  |   98 |   55 |   71 |   224 |
+| 1006 | Anvith  | 2001-09-15 | MBA    |   76 |   65 |   68 |   209 |
+| 1007 | Jagath  | 2001-02-28 | MTECH  |   88 |   76 |   89 |   253 |
+| 1008 | Zabar   | 2001-12-13 | MTECH  |   45 |   55 |   72 |   172 |
+| 1009 | Zubair  | 2000-10-26 | MCA    |   85 |   51 |   73 |   209 |
++------+---------+------------+--------+------+------+------+-------+
+
+
+i. Update the column total by adding the columns mark1, mark2, mark3. 
+
+alter table Student
+add Total int(3);
+
+update Student
+set Total = (M1+M2+M3);
+
++------+---------+------------+--------+------+------+------+-------+
+| Usn  | Sname   | Dob        | Branch | M1   | M2   | M3   | Total |
++------+---------+------------+--------+------+------+------+-------+
+| 1001 | Akash   | 2001-05-25 | MCA    |   92 |   85 |   88 |   265 |
+| 1002 | Bharath | 2001-02-21 | MCA    |   97 |   77 |   88 |   262 |
+| 1003 | Gireesh | 2001-09-12 | MBA    |   76 |   65 |   68 |   209 |
+| 1004 | Suresh  | 2001-05-28 | MTECH  |   88 |   85 |   81 |   254 |
+| 1005 | Xaviar  | 2000-11-13 | MTECH  |   98 |   55 |   71 |   224 |
+| 1006 | Anvith  | 2001-09-15 | MBA    |   76 |   65 |   68 |   209 |
+| 1007 | Jagath  | 2001-02-28 | MTECH  |   88 |   76 |   89 |   253 |
+| 1008 | Zabar   | 2001-12-13 | MTECH  |   45 |   55 |   72 |   172 |
++------+---------+------------+--------+------+------+------+-------+
+
+
+
+
+ii.Find the GPA score of all the students. 
+
+
+alter table Student
+add GPA int(3);
+
+
+update Student
+set GPA=
+case when Total>250 Then 9
+	when Total>200 Then 8
+	when Total>150 Then 7
+	when Total>100 Then 6
+	when Total>50 Then 5
+	when Total>0 Then 4
+	END;
+
+select * from Student;
++------+---------+------------+--------+------+------+------+-------+------+
+| Usn  | Sname   | Dob        | Branch | M1   | M2   | M3   | Total | GPA  |
++------+---------+------------+--------+------+------+------+-------+------+
+| 1002 | Bharath | 2001-02-21 | MCA    |   97 |   77 |   88 |   262 |    9 |
+| 1003 | Gireesh | 2001-09-12 | MBA    |   76 |   65 |   68 |   209 |    8 |
+| 1004 | Suresh  | 2001-05-28 | MTECH  |   88 |   85 |   81 |   254 |    9 |
+| 1005 | Xaviar  | 2000-11-13 | MTECH  |   98 |   55 |   71 |   224 |    8 |
+| 1006 | Anvith  | 2001-09-15 | MBA    |   76 |   65 |   68 |   209 |    8 |
+| 1007 | Jagath  | 2001-02-28 | MTECH  |   88 |   76 |   89 |   253 |    9 |
+| 1008 | Zabar   | 2001-12-13 | MTECH  |   45 |   55 |   72 |   172 |    7 |
+| 1009 | Zubair  | 2000-10-26 | MCA    |   85 |   51 |   73 |   209 |    8 |
++------+---------+------------+--------+------+------+------+-------+------+
+
+
+
+iii. Find the students who born on a particular year of birth from the date_of_birth column. 
+
+select * from Student where Dob like '2000%';
+
++------+--------+------------+--------+------+------+------+-------+
+| Usn  | Sname  | Dob        | Branch | M1   | M2   | M3   | Total |
++------+--------+------------+--------+------+------+------+-------+
+| 1005 | Xaviar | 2000-11-13 | MTECH  |   98 |   55 |   71 |   224 |
+| 1009 | Zubair | 2000-10-26 | MCA    |   85 |   51 |   73 |   209 |
++------+--------+------------+--------+------+------+------+-------+
+
+
+
+
+iv. List the students who are studying in a particular branch of study. 
+select * from Student where Branch='MCA';
+
++------+---------+------------+--------+------+------+------+-------+
+| Usn  | Sname   | Dob        | Branch | M1   | M2   | M3   | Total |
++------+---------+------------+--------+------+------+------+-------+
+| 1001 | Akash   | 2001-05-25 | MCA    |   92 |   85 |   88 |   265 |
+| 1002 | Bharath | 2001-02-21 | MCA    |   97 |   77 |   88 |   262 |
+| 1009 | Zubair  | 2000-10-26 | MCA    |   85 |   51 |   73 |   209 |
++------+---------+------------+--------+------+------+------+-------+
+
+
+v. Find the maximum GPA score of the student branch-wise. 
+
+select Branch,Max(GPA) As Max from Student Group by Branch;
+
++--------+------+
+| Branch | Max  |
++--------+------+
+| MCA    |    9 |
+| MBA    |    8 |
+| MTECH  |    9 |
++--------+------+
+
+
+vi. Find the students whose name starts with the alphabet “S”. 
+select * from Student where Sname like 'S%';
+
++------+--------+------------+--------+------+------+------+-------+
+| Usn  | Sname  | Dob        | Branch | M1   | M2   | M3   | Total |
++------+--------+------------+--------+------+------+------+-------+
+| 1004 | Suresh | 2001-05-28 | MTECH  |   88 |   85 |   81 |   254 |
++------+--------+------------+--------+------+------+------+-------+
+
+
+
+vii. Find the students whose name ends with the alphabets “AR”. 
+
+select * from Student where Sname like '%ar';
+
++------+--------+------------+--------+------+------+------+-------+
+| Usn  | Sname  | Dob        | Branch | M1   | M2   | M3   | Total |
++------+--------+------------+--------+------+------+------+-------+
+| 1005 | Xaviar | 2000-11-13 | MTECH  |   98 |   55 |   71 |   224 |
+| 1008 | Zabar  | 2001-12-13 | MTECH  |   45 |   55 |   72 |   172 |
++------+--------+------------+--------+------+------+------+-------+
+
+
+viii. Delete the student details whose USN is given as 1001
+
+delete from Student where Usn='1001';
++------+---------+------------+--------+------+------+------+-------+
+| Usn  | Sname   | Dob        | Branch | M1   | M2   | M3   | Total |
++------+---------+------------+--------+------+------+------+-------+
+| 1002 | Bharath | 2001-02-21 | MCA    |   97 |   77 |   88 |   262 |
+| 1003 | Gireesh | 2001-09-12 | MBA    |   76 |   65 |   68 |   209 |
+| 1004 | Suresh  | 2001-05-28 | MTECH  |   88 |   85 |   81 |   254 |
+| 1005 | Xaviar  | 2000-11-13 | MTECH  |   98 |   55 |   71 |   224 |
+| 1006 | Anvith  | 2001-09-15 | MBA    |   76 |   65 |   68 |   209 |
+| 1007 | Jagath  | 2001-02-28 | MTECH  |   88 |   76 |   89 |   253 |
+| 1008 | Zabar   | 2001-12-13 | MTECH  |   45 |   55 |   72 |   172 |
+| 1009 | Zubair  | 2000-10-26 | MCA    |   85 |   51 |   73 |   209 |
++------+---------+------------+--------+------+------+------+-------+
+
